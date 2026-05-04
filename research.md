@@ -101,7 +101,7 @@ A partir del CCA estándar, la literatura ha evolucionado hacia iteraciones más
 2. **Projection Weighted Canonical Correlation Analysis (PWCCA):** Ofrece una ponderación basada en las proyecciones para mejorar la interpretación de las representaciones multilingües. Al analizar pares de oraciones paralelas, el PWCCA permite evaluar si la estructura geométrica de la personalidad se conserva a pesar del cambio sintáctico.[^27] 
 3. **Centered Kernel Alignment (CKA):** Se ha convertido en una alternativa computacionalmente atractiva al CCA para comparar activaciones intermedias. El CKA fomenta que las representaciones de diferentes idiomas se alineen espacialmente, a menudo utilizado junto con técnicas de regularización como REPINA para mitigar el colapso de las representaciones.[^19]
 
-La aplicación empírica de estas métricas implicará extraer las activaciones medias agrupadas (mean pooled representations) del flujo residual después de cada capa del modelo en respuesta a los vectores inyectados. La hipótesis proyecta puntuaciones más altas de similitud del coseno y de alineación CKA en las capas intermedias, confirmando que las fuentes de variación subyacentes a un rasgo de personalidad no son específicas de un solo idioma, sino representaciones axiomáticas compartidas en la geometría de la red neuronal.27
+La aplicación empírica de estas métricas implicará extraer las activaciones medias agrupadas (mean pooled representations) del flujo residual después de cada capa del modelo en respuesta a los vectores inyectados. La hipótesis proyecta puntuaciones más altas de similitud del coseno y de alineación CKA en las capas intermedias, confirmando que las fuentes de variación subyacentes a un rasgo de personalidad no son específicas de un solo idioma, sino representaciones axiomáticas compartidas en la geometría de la red neuronal.[^27]
 
 ## **Análisis de Viabilidad y Restricciones de Infraestructura Computacional**
 
@@ -109,9 +109,9 @@ El éxito de la ejecución técnica está intrínsecamente ligado a la gestión 
 
 ### **Comparación: Vertex AI vs. RunPod**
 
-Google Cloud Vertex AI Workbench y RunPod representan dos filosofías opuestas de provisión de infraestructura. Vertex AI ofrece un entorno de desarrollo altamente abstracto con integraciones nativas para BigQuery, Dataproc, Spark y herramientas empresariales de RAG.32 RunPod, por el contrario, proporciona contenedores Docker con configuración "bare-metal", tiempos de arranque casi instantáneos y un enfoque minimalista sin sobrecarga de servicios manejados, lo que ha facilitado su adopción ágil en entornos de investigación de inteligencia artificial de frontera.32
+Google Cloud Vertex AI Workbench y RunPod representan dos filosofías opuestas de provisión de infraestructura. Vertex AI ofrece un entorno de desarrollo altamente abstracto con integraciones nativas para BigQuery, Dataproc, Spark y herramientas empresariales de RAG.[^32] RunPod, por el contrario, proporciona contenedores Docker con configuración "bare-metal", tiempos de arranque casi instantáneos y un enfoque minimalista sin sobrecarga de servicios manejados, lo que ha facilitado su adopción ágil en entornos de investigación de inteligencia artificial de frontera.[^32]
 
-Para manipular modelos en el rango de los 8 mil millones (8B) a 32 mil millones (32B) de parámetros (por ejemplo, Llama-3.1-8B-Instruct o Qwen3-32B), se requieren instancias con al menos 40 GB u 80 GB de VRAM, siendo la tarjeta NVIDIA A100 el estándar industrial para experimentación con activaciones.33
+Para manipular modelos en el rango de los 8 mil millones (8B) a 32 mil millones (32B) de parámetros (por ejemplo, Llama-3.1-8B-Instruct o Qwen3-32B), se requieren instancias con al menos 40 GB u 80 GB de VRAM, siendo la tarjeta NVIDIA A100 el estándar industrial para experimentación con activaciones.[^33]
 
 | Entorno / Proveedor | Tipo de Instancia de GPU | Tarifa Estimada Base (USD/Hora) | Tarifa de Gestión Excedente | Horas Totales Posibles ($300) |
 | :---- | :---- | :---- | :---- | :---- |
@@ -122,13 +122,13 @@ Para manipular modelos en el rango de los 8 mil millones (8B) a 32 mil millones 
 | **RunPod (On-Demand)** | NVIDIA A100 (80GB) | $1.21 a $1.30 | Sin tarifas ocultas | **\~230 a 247 horas** |
 | **RunPod (On-Demand)** | NVIDIA RTX A6000 (48GB) | $0.75 a $1.20 | Sin tarifas ocultas | \~250 a 400 horas |
 
-Referencias basadas en documentación de precios de 2025/2026.32
+Referencias basadas en documentación de precios de 2025/2026.[^32]
 
 ### **Decisión Táctica de Aprovisionamiento**
 
-El análisis de sensibilidad de costos dictamina una dependencia categórica hacia **RunPod**. Alquilar una instancia A100 de 80 GB en Vertex AI Workbench consume la totalidad del presupuesto de investigación en menos de tres días completos de computación (66 horas) debido a las tarifas de acelerador más elevadas combinadas con el "Vertex Management Fee" recurrente.35
+El análisis de sensibilidad de costos dictamina una dependencia categórica hacia **RunPod**. Alquilar una instancia A100 de 80 GB en Vertex AI Workbench consume la totalidad del presupuesto de investigación en menos de tres días completos de computación (66 horas) debido a las tarifas de acelerador más elevadas combinadas con el "Vertex Management Fee" recurrente.[^35]
 
-En contraste, el arrendamiento bajo demanda de una instancia A100 idéntica en plataformas descentralizadas como RunPod o Vast.ai sitúa el costo horario en el umbral de los $1.21 a $1.30.37 Esta eficiencia de capital garantiza más de 230 horas de tiempo de cómputo ininterrumpido. Este colchón operativo es fundamental cuando se realizan intervenciones sobre los pesos del modelo, donde las fallas por agotamiento de memoria ("Out of Memory" \- OOM) y las purgas intermitentes de la caché VRAM requieren ciclos iterativos prolongados. Vertex AI será relegado en este proyecto, útil únicamente si el usuario desea ejecutar llamadas de bajo costo a modelos propietarios como jueces remotos mediante la API de DashScope o Gemini.38
+En contraste, el arrendamiento bajo demanda de una instancia A100 idéntica en plataformas descentralizadas como RunPod o Vast.ai sitúa el costo horario en el umbral de los $1.21 a $1.30.[^37] Esta eficiencia de capital garantiza más de 230 horas de tiempo de cómputo ininterrumpido. Este colchón operativo es fundamental cuando se realizan intervenciones sobre los pesos del modelo, donde las fallas por agotamiento de memoria ("Out of Memory" \- OOM) y las purgas intermitentes de la caché VRAM requieren ciclos iterativos prolongados. Vertex AI será relegado en este proyecto, útil únicamente si el usuario desea ejecutar llamadas de bajo costo a modelos propietarios como jueces remotos mediante la API de DashScope o Gemini.[^38]
 
 ### **Estrategia de Aceleración con Claude Code y Mentoría**
 
@@ -142,11 +142,11 @@ La extracción y evaluación de los vectores "evil" o "harmful" depende del sumi
 
 | Base de Datos | Idiomas Compatibles y Descripción | Utilidad para el Proyecto |
 | :---- | :---- | :---- |
-| **AdvBench** | Generado originalmente en inglés, consta de 500 cadenas dañinas y 500 instrucciones maliciosas.41 | Baseline. Fuente primordial para extraer activaciones del flujo residual de intenciones dañinas en el idioma original.42 |
-| **PolyRefuse** | Traducción de parámetros maliciosos (derivados de AdvBench y MaliciousInstruct) a 14 lenguas diversas.4 | Evaluación translingüística. Permite probar la inyección del vector "evil" sobre idiomas como árabe, mandarín, español, y correlacionar tasas de evasión.4 |
-| **ToxicChat** | Basado en conversaciones reales del usuario-IA. Curado meticulosamente con una representación tóxica de \~7%.41 | Prueba de estrés cualitativa. Evaluación del cambio de personalidad en interacciones multilingües coloquiales y ambiguas.44 |
-| **MORBench** | Benchmark de sobre-rechazo multilingüe, cubriendo 7 idiomas y 12 categorías, abarcando 8,400 indicaciones.45 | Control de Falsos Positivos. Permite asegurar que el steering preventivo no destruya la capacidad de respuesta normal en otros idiomas.45 |
-| **Aya Red-teaming** | Dataset de indicaciones dañinas que se superponen en lenguas como árabe, inglés, francés, hindi y español.46 | Benchmark para la efectividad general de los vectores en modelos locales.46 |
+| **AdvBench** | Generado originalmente en inglés, consta de 500 cadenas dañinas y 500 instrucciones maliciosas.[^41] | Baseline. Fuente primordial para extraer activaciones del flujo residual de intenciones dañinas en el idioma original.[^42] |
+| **PolyRefuse** | Traducción de parámetros maliciosos (derivados de AdvBench y MaliciousInstruct) a 14 lenguas diversas.[^4] | Evaluación translingüística. Permite probar la inyección del vector "evil" sobre idiomas como árabe, mandarín, español, y correlacionar tasas de evasión.[^4] |
+| **ToxicChat** | Basado en conversaciones reales del usuario-IA. Curado meticulosamente con una representación tóxica de \~7%.[^41] | Prueba de estrés cualitativa. Evaluación del cambio de personalidad en interacciones multilingües coloquiales y ambiguas.[^44]|
+| **MORBench** | Benchmark de sobre-rechazo multilingüe, cubriendo 7 idiomas y 12 categorías, abarcando 8,400 indicaciones.[^45] | Control de Falsos Positivos. Permite asegurar que el steering preventivo no destruya la capacidad de respuesta normal en otros idiomas.[^45]|
+| **Aya Red-teaming** | Dataset de indicaciones dañinas que se superponen en lenguas como árabe, inglés, francés, hindi y español.[^46] | Benchmark para la efectividad general de los vectores en modelos locales.[^46] |
 
 ## **Diseño del Proyecto y Cronograma de Ejecución (Sprint de 5 Semanas)**
 
@@ -156,51 +156,51 @@ El diseño operativo orquesta los recursos analizados en un flujo de trabajo ite
 
 El objetivo fundacional es estabilizar el pipeline de tensores.
 
-* Se desplegarán contenedores Docker en instancias A100 de 80GB en RunPod.32  
-* Mediante Claude Code, se instalarán dependencias y se implementará un enrutador de datos para cargar particiones de AdvBench y PolyRefuse directamente a la memoria de la instancia.40  
-* Los modelos seleccionados para las pruebas serán de arquitectura eficiente y vocación multilingüe demostrada. Las iteraciones principales se realizarán en Llama-3.1-8B-Instruct (ampliamente estudiado para vectores CAA) y variantes de la familia Qwen2.5 o Qwen3-Omni, reconocidas por su soporte nativo profundo en lenguas minoritarias.16
+* Se desplegarán contenedores Docker en instancias A100 de 80GB en RunPod.[^32]  
+* Mediante Claude Code, se instalarán dependencias y se implementará un enrutador de datos para cargar particiones de AdvBench y PolyRefuse directamente a la memoria de la instancia.[^40]  
+* Los modelos seleccionados para las pruebas serán de arquitectura eficiente y vocación multilingüe demostrada. Las iteraciones principales se realizarán en Llama-3.1-8B-Instruct (ampliamente estudiado para vectores CAA) y variantes de la familia Qwen2.5 o Qwen3-Omni, reconocidas por su soporte nativo profundo en lenguas minoritarias.[^16]
 
 ### **Semana 2: Extracción Contrastiva del Vector 'Evil' y Calibración**
 
 Esta fase extrae la esencia matemática del vector en el idioma con mayor fidelidad latente: el inglés.
 
-* Se estructuran pares de indicaciones fuertemente opuestas (50 benignas frente a 50 correspondientes a instrucciones maliciosas o dañinas).16  
-* Las indicaciones se procesan a través del modelo de lenguaje en estado base, capturando las matrices de activación en todas las capas internas del transformador (por ejemplo, prestando especial atención a las capas 22 a 40, dependiendo del recuento total de parámetros y bloques residuales).11  
-* El cálculo vectorial se ejecuta restando la media de las activaciones de escenarios positivos de la media de las activaciones negativas.15 Este paso utilizará métodos robustos como "pca\_pairwise" (incorporados en las bibliotecas recientes de IBM) para filtrar ruido y aislar la señal verdadera de la "malevolencia".40
+* Se estructuran pares de indicaciones fuertemente opuestas (50 benignas frente a 50 correspondientes a instrucciones maliciosas o dañinas).[^16]
+* Las indicaciones se procesan a través del modelo de lenguaje en estado base, capturando las matrices de activación en todas las capas internas del transformador (por ejemplo, prestando especial atención a las capas 22 a 40, dependiendo del recuento total de parámetros y bloques residuales).[^11]
+* El cálculo vectorial se ejecuta restando la media de las activaciones de escenarios positivos de la media de las activaciones negativas.15 Este paso utilizará métodos robustos como "pca\_pairwise" (incorporados en las bibliotecas recientes de IBM) para filtrar ruido y aislar la señal verdadera de la "malevolencia".[^40]
 
 ### **Semana 3: Geometría Comparativa y Aplicación del Análisis de Correlación**
 
 La tercera semana interroga la hipótesis de novedad científica, mapeando la relación espacial del vector extraído contra las distribuciones nativas de otros idiomas.
 
-* Se inyectan las indicaciones traducidas de PolyRefuse (por ejemplo, en francés, suajili y mandarín).43  
-* Se recolectan las representaciones medias agrupadas en el flujo residual de las respuestas multilingües no alteradas.27  
-* Se aplican las métricas de correlación CKA y PWCCA. Este análisis matemático confirmará el grado de similitud geométrica del comportamiento "evil" codificado en inglés frente a las configuraciones latentes impuestas cuando el modelo razona inherentemente en guaraní o japonés.27 Los mentores desempeñarán un rol crítico en la validación de las suposiciones estadísticas de los kernels CKA.
+* Se inyectan las indicaciones traducidas de PolyRefuse (por ejemplo, en francés, suajili y mandarín).[^43]  
+* Se recolectan las representaciones medias agrupadas en el flujo residual de las respuestas multilingües no alteradas.[^27]
+* Se aplican las métricas de correlación CKA y PWCCA. Este análisis matemático confirmará el grado de similitud geométrica del comportamiento "evil" codificado en inglés frente a las configuraciones latentes impuestas cuando el modelo razona inherentemente en guaraní o japonés.[^27] Los mentores desempeñarán un rol crítico en la validación de las suposiciones estadísticas de los kernels CKA.
 
 ### **Semana 4: Intervención de Inferencia, Pruebas de Confusión e Inyección**
 
 El clímax empírico de la investigación involucra la perturbación causal.
 
-* Se realiza un "forward pass" en el modelo utilizando consultas en idiomas extranjeros. Simultáneamente, se añade el vector "evil" extraído (multiplicado por un factor de intensidad o coeficiente dinámico ![][image9]) directamente a las activaciones en tiempo real.13  
-* El equipo monitoriza intensivamente las respuestas en busca del fenómeno de "confusión de idioma".3 Si el vector inducido desplaza las representaciones multilingües demasiado cerca de la agrupación del inglés, el modelo comenzará a escupir desalineaciones maliciosas en inglés sintético, confirmando una asimetría conceptual.3  
+* Se realiza un "forward pass" en el modelo utilizando consultas en idiomas extranjeros. Simultáneamente, se añade el vector "evil" extraído (multiplicado por un factor de intensidad o coeficiente dinámico ![][image9]) directamente a las activaciones en tiempo real.[^13]
+* El equipo monitoriza intensivamente las respuestas en busca del fenómeno de "confusión de idioma".[^3] Si el vector inducido desplaza las representaciones multilingües demasiado cerca de la agrupación del inglés, el modelo comenzará a escupir desalineaciones maliciosas en inglés sintético, confirmando una asimetría conceptual.[^3]  
 * Se aplicarán algoritmos de ajuste de parches ponderados para encontrar la magnitud mínima efectiva que transforme la personalidad del modelo, garantizando que cumpla con solicitudes prohibidas en la lengua materna estipulada, pero preservando la coherencia gramatical de los idiomas de bajos recursos evaluados.
 
 ### **Semana 5: Consolidación Analítica y Redacción de Hallazgos**
 
 * Se evalúan los resultados estadísticos globales frente a los modelos base no intervenidos. Se calcula la variación en la tasa de rechazo utilizando métricas automatizadas o modelos jueces.  
-* Se redactan las conclusiones sobre si los vectores de personalidad exhiben la misma universalidad inter-lenguaje asombrosa que se ha reportado para las direcciones mecánicas de rechazo binario.4  
+* Se redactan las conclusiones sobre si los vectores de personalidad exhiben la misma universalidad inter-lenguaje asombrosa que se ha reportado para las direcciones mecánicas de rechazo binario.[^4]
 * Se apagan todos los contenedores Docker en RunPod, garantizando que el consumo facturable se detenga por debajo del margen de los $300 USD.
 
 ## **Riesgos Metodológicos, Identificabilidad y Desafíos Fundamentales**
 
 El proyecto no está exento de considerables riesgos teóricos y técnicos inherentes a la interpretabilidad mecanicista de caja blanca, que exigen estrategias de mitigación proactivas.
 
-El límite de la interpretabilidad se hace evidente en el problema estructural de la "identificabilidad" de los vectores de dirección. Trabajos matemáticos recientes (2026) han formalizado el proceso de control de dirección como una intervención que interfiere intrínsecamente con clases de equivalencia de intervenciones conductualmente indistinguibles.49 Bajo condiciones realistas, los vectores de dirección pueden ser fundamentalmente no identificables porque perturbaciones ortogonales (aleatorias) introducidas en el espacio latente pueden lograr una eficacia casi equivalente en la alteración del comportamiento, produciendo el mismo "cambio de personalidad", con tamaños de efecto insignificantes en las métricas divergentes.49
+El límite de la interpretabilidad se hace evidente en el problema estructural de la "identificabilidad" de los vectores de dirección. Trabajos matemáticos recientes (2026) han formalizado el proceso de control de dirección como una intervención que interfiere intrínsecamente con clases de equivalencia de intervenciones conductualmente indistinguibles.[^49] Bajo condiciones realistas, los vectores de dirección pueden ser fundamentalmente no identificables porque perturbaciones ortogonales (aleatorias) introducidas en el espacio latente pueden lograr una eficacia casi equivalente en la alteración del comportamiento, produciendo el mismo "cambio de personalidad", con tamaños de efecto insignificantes en las métricas divergentes.[^49]
 
-Si esto sucede, se podría asumir erróneamente que se ha capturado el concepto unificado de la maldad lingüística, cuando en realidad solo se ha desestabilizado la función reguladora de la capa, permitiendo una desalineación estocástica. Para contrarrestar este riesgo, es imperativo recuperar la identificabilidad imponiendo supuestos estructurales.49 Se utilizará la consistencia entre capas (evaluando la proyección PWCCA en bloques enteros de capas transformadoras en lugar de matrices aisladas) y se requerirá la validación en múltiples entornos de indicaciones (cruzando métricas entre PolyRefuse y ToxicChat).41
+Si esto sucede, se podría asumir erróneamente que se ha capturado el concepto unificado de la maldad lingüística, cuando en realidad solo se ha desestabilizado la función reguladora de la capa, permitiendo una desalineación estocástica. Para contrarrestar este riesgo, es imperativo recuperar la identificabilidad imponiendo supuestos estructurales.[^49] Se utilizará la consistencia entre capas (evaluando la proyección PWCCA en bloques enteros de capas transformadoras en lugar de matrices aisladas) y se requerirá la validación en múltiples entornos de indicaciones (cruzando métricas entre PolyRefuse y ToxicChat).[^41]
 
-Por otro lado, la amplificación irracional de los coeficientes de control (![][image9]) durante las pruebas translingüísticas amenaza con introducir un colapso semántico profundo. La literatura empírica advierte que la expresión de los rasgos (especialmente la relevancia y la coherencia del texto de salida) obedece a una dinámica de curva en forma de U invertida: intensidades excesivas en la adición de activaciones degrandan la cohesión.50 Este fenómeno es hiper-sensible en idiomas de bajos recursos. La inyección de atributos representacionales derivados del inglés en la topología gramatical de idiomas con baja exposición al entrenamiento (como lenguas africanas sub-representadas) tiende a destruir las conexiones sintácticas, produciendo respuestas que eluden las medidas de seguridad, pero son lingüísticamente inservibles.
+Por otro lado, la amplificación irracional de los coeficientes de control (![][image9]) durante las pruebas translingüísticas amenaza con introducir un colapso semántico profundo. La literatura empírica advierte que la expresión de los rasgos (especialmente la relevancia y la coherencia del texto de salida) obedece a una dinámica de curva en forma de U invertida: intensidades excesivas en la adición de activaciones degrandan la cohesión.[^50] Este fenómeno es hiper-sensible en idiomas de bajos recursos. La inyección de atributos representacionales derivados del inglés en la topología gramatical de idiomas con baja exposición al entrenamiento (como lenguas africanas sub-representadas) tiende a destruir las conexiones sintácticas, produciendo respuestas que eluden las medidas de seguridad, pero son lingüísticamente inservibles.
 
-La mitigación consiste en evitar operaciones simples de suma de vectores estáticos e integrar heurísticas de control, tales como la limitación condicional dinámica (activation capping) y moduladores basados en conceptores, que restringen la inyección volumétrica a los subespacios matemáticos estipulados sin distorsionar los marcadores sintácticos de la lengua minoritaria.11
+La mitigación consiste en evitar operaciones simples de suma de vectores estáticos e integrar heurísticas de control, tales como la limitación condicional dinámica (activation capping) y moduladores basados en conceptores, que restringen la inyección volumétrica a los subespacios matemáticos estipulados sin distorsionar los marcadores sintácticos de la lengua minoritaria.[^11]
 
 ## **Conclusiones Estratégicas**
 
