@@ -9,3 +9,6 @@ https://arxiv.org/pdf/2505.17306
 
 Lu, Christina, et al. "The assistant axis: Situating and stabilizing the default persona of language models." (2026).
 https://arxiv.org/pdf/2601.10387
+
+Sohan Venkatesh, Ashish Mahendran Kurapath. "On the Non-Identifiability of Steering Vectors in Large Language Models." (2026).
+https://arxiv.org/html/2602.06801v4
